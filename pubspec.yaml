@@ -1,0 +1,48 @@
+name: musick
+description: "Musick — your private, fully offline music player."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  riverpod: ^2.5.1
+  flutter_riverpod: ^2.5.1
+
+  # Local persistent database
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+  path_provider: ^2.1.3
+
+  # On-device audio/media library scanning
+  # (on_audio_query reads the Android MediaStore: titles, artists, albums,
+  # durations, embedded artwork — no file copying required)
+  on_audio_query: ^2.9.0
+
+  # Runtime permissions (READ_MEDIA_AUDIO / READ_EXTERNAL_STORAGE)
+  permission_handler: ^11.3.1
+
+  # Local key-value settings (theme mode, accent color, sort preference)
+  shared_preferences: ^2.2.3
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icon/
+
+# Phase 2 will add: just_audio + audio_service (background playback),
+# audio_session, and a caching layer for artwork bitmaps. Not included yet
+# so Phase 1 stays focused on scanning + the local library only, per the
+# incremental build plan.

@@ -1,0 +1,16 @@
+<svg width="108" height="108" viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="noteGradFg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#EAF1FF"/>
+    </linearGradient>
+  </defs>
+  <!-- Glyph kept inside the 66dp safe zone (18-90 on both axes) -->
+  <g transform="translate(54 54) scale(0.34) translate(-256 -256)">
+    <path d="M198 158 L342 122 L342 168 L198 204 Z" fill="url(#noteGradFg)"/>
+    <rect x="188" y="196" width="20" height="150" rx="10" fill="url(#noteGradFg)"/>
+    <ellipse cx="176" cy="352" rx="42" ry="32" fill="url(#noteGradFg)" transform="rotate(-12 176 352)"/>
+    <rect x="332" y="140" width="20" height="150" rx="10" fill="url(#noteGradFg)"/>
+    <ellipse cx="320" cy="296" rx="42" ry="32" fill="url(#noteGradFg)" transform="rotate(-12 320 296)"/>
+  </g>
+</svg>

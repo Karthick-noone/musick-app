@@ -1,0 +1,38 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5B4FE8"/>
+      <stop offset="55%" stop-color="#3E7BF0"/>
+      <stop offset="100%" stop-color="#18C9C9"/>
+    </linearGradient>
+    <linearGradient id="noteGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#EAF1FF"/>
+    </linearGradient>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#0B1B4D" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background: rounded square -->
+  <rect x="0" y="0" width="512" height="512" rx="118" fill="url(#bgGrad)"/>
+
+  <!-- Subtle inner glow ring -->
+  <circle cx="256" cy="256" r="188" fill="none" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="14"/>
+
+  <!-- Stylized double music note glyph (custom "Musick" mark) -->
+  <g filter="url(#softShadow)">
+    <!-- beam connecting the two notes -->
+    <path d="M198 158 L342 122 L342 168 L198 204 Z" fill="url(#noteGrad)"/>
+
+    <!-- left note stem -->
+    <rect x="188" y="196" width="20" height="150" rx="10" fill="url(#noteGrad)"/>
+    <!-- left note head -->
+    <ellipse cx="176" cy="352" rx="42" ry="32" fill="url(#noteGrad)" transform="rotate(-12 176 352)"/>
+
+    <!-- right note stem -->
+    <rect x="332" y="140" width="20" height="150" rx="10" fill="url(#noteGrad)"/>
+    <!-- right note head -->
+    <ellipse cx="320" cy="296" rx="42" ry="32" fill="url(#noteGrad)" transform="rotate(-12 320 296)"/>
+  </g>
+</svg>
