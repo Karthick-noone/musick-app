@@ -30,7 +30,22 @@ dependencies:
   # Local key-value settings (theme mode, accent color, sort preference)
   shared_preferences: ^2.2.3
 
+  # Audio playback + background/lock-screen media session
+  just_audio: ^0.9.40
+  audio_service: ^0.18.15
+  audio_session: ^0.1.21
+  rxdart: ^0.27.7
+
+  # Splash screen animation + profile photo picking
+  lottie: ^3.1.2
+  image_picker: ^1.1.2
+
   cupertino_icons: ^1.0.8
+  on_audio_query_android: ^1.1.0
+
+dependency_overrides:
+  on_audio_query_android:
+    path: packages/on_audio_query_android
 
 dev_dependencies:
   flutter_test:
@@ -41,6 +56,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon/
+    - assets/animations/
 
 # Phase 2 will add: just_audio + audio_service (background playback),
 # audio_session, and a caching layer for artwork bitmaps. Not included yet

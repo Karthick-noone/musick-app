@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/song.dart';
@@ -41,10 +43,18 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
   final _scanner = MusicScannerService.instance;
   final _db = DatabaseService.instance;
 
+  final Completer<void> _readyCompleter = Completer<void>();
+
+  /// Resolves once the splash screen has enough to show (permission
+  /// checked, cached songs loaded) — NOT once a full rescan completes, so
+  /// startup never waits on scanning 700+ files.
+  Future<void> get ready => _readyCompleter.future;
+
   Future<void> _bootstrap() async {
     final hasPerm = await _scanner.hasPermission();
     if (!hasPerm) {
       state = state.copyWith(status: LibraryStatus.needsPermission);
+      if (!_readyCompleter.isCompleted) _readyCompleter.complete();
       return;
     }
     await _loadFromDbThenScan();
@@ -67,6 +77,7 @@ class LibraryNotifier extends StateNotifier<LibraryState> {
     // songs), then refresh in the background via a scan.
     final cached = await _db.getAllSongs();
     state = state.copyWith(status: LibraryStatus.ready, songs: cached);
+    if (!_readyCompleter.isCompleted) _readyCompleter.complete();
     await rescan();
   }
 

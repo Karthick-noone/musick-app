@@ -1,13 +1,44 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/constants/app_constants.dart';
 import 'core/theme/app_theme.dart';
+import 'providers/library_provider.dart';
+import 'providers/player_provider.dart';
 import 'providers/theme_provider.dart';
-import 'screens/songs/songs_screen.dart';
+import 'screens/splash/splash_screen.dart';
+import 'services/audio_player_service.dart';
 
-void main() {
-  runApp(const ProviderScope(child: MusickApp()));
+// Assigned once, right after AudioService.init below, before runApp — the
+// closure passed into MusickAudioHandler captures this variable rather
+// than a value, so it's safe even though the container doesn't exist yet
+// at the moment the handler itself is constructed.
+late final ProviderContainer _container;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final audioHandler = await AudioService.init(
+    builder: () => MusickAudioHandler(
+      onValidPlay: (song, durationPlayedMs) {
+        _container.read(libraryProvider.notifier).recordPlay(song, durationPlayedMs: durationPlayedMs);
+      },
+    ),
+    config: const AudioServiceConfig(
+      androidNotificationChannelId: 'com.musick.app.channel.audio',
+      androidNotificationChannelName: 'Musick playback',
+      androidNotificationIcon: 'mipmap/ic_launcher',
+      androidNotificationOngoing: true,
+      androidStopForegroundOnPause: true,
+    ),
+  );
+
+  _container = ProviderContainer(
+    overrides: [audioHandlerProvider.overrideWithValue(audioHandler)],
+  );
+
+  runApp(UncontrolledProviderScope(container: _container, child: const MusickApp()));
 }
 
 class MusickApp extends ConsumerWidget {
@@ -23,70 +54,7 @@ class MusickApp extends ConsumerWidget {
       themeMode: themeState.mode,
       theme: AppTheme.light(themeState.accent),
       darkTheme: AppTheme.dark(themeState.accent),
-      home: const RootShell(),
-    );
-  }
-}
-
-/// Bottom-navigation shell: Home / Songs / Albums / Playlists / More.
-/// Only Songs is implemented in Phase 1 — the rest are lightweight
-/// placeholders so the navigation structure is in place from the start.
-class RootShell extends StatefulWidget {
-  const RootShell({super.key});
-
-  @override
-  State<RootShell> createState() => _RootShellState();
-}
-
-class _RootShellState extends State<RootShell> {
-  int _index = 1; // Land on Songs for Phase 1, where the working feature is.
-
-  static const _tabs = [
-    _PlaceholderTab(title: 'Home', icon: Icons.home_rounded),
-    SongsScreen(),
-    _PlaceholderTab(title: 'Albums', icon: Icons.album_rounded),
-    _PlaceholderTab(title: 'Playlists', icon: Icons.playlist_play_rounded),
-    _PlaceholderTab(title: 'More', icon: Icons.more_horiz_rounded),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(index: _index, children: _tabs),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _index,
-        onDestinationSelected: (i) => setState(() => _index = i),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home_rounded), label: 'Home'),
-          NavigationDestination(icon: Icon(Icons.music_note_outlined), selectedIcon: Icon(Icons.music_note_rounded), label: 'Songs'),
-          NavigationDestination(icon: Icon(Icons.album_outlined), selectedIcon: Icon(Icons.album_rounded), label: 'Albums'),
-          NavigationDestination(icon: Icon(Icons.playlist_play_outlined), selectedIcon: Icon(Icons.playlist_play_rounded), label: 'Playlists'),
-          NavigationDestination(icon: Icon(Icons.more_horiz_outlined), selectedIcon: Icon(Icons.more_horiz_rounded), label: 'More'),
-        ],
-      ),
-    );
-  }
-}
-
-class _PlaceholderTab extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  const _PlaceholderTab({required this.title, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 48, color: Theme.of(context).colorScheme.outline),
-            const SizedBox(height: 12),
-            Text('$title arrives in a later phase', style: Theme.of(context).textTheme.bodyMedium),
-          ],
-        ),
-      ),
+      home: const SplashScreen(),
     );
   }
 }

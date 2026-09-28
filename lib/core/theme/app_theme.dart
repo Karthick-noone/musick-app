@@ -62,7 +62,7 @@ class AppTheme {
         activeTrackColor: scheme.primary,
         inactiveTrackColor: scheme.surfaceContainerHighest,
         thumbColor: scheme.primary,
-        overlayColor: scheme.primary.withOpacity(0.15),
+        overlayColor: scheme.primary.withValues(alpha: 0.15),
         trackHeight: 4,
       ),
       chipTheme: ChipThemeData(

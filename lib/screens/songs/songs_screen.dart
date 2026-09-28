@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/song.dart';
 import '../../providers/library_provider.dart';
+import '../../providers/player_provider.dart';
 import '../../widgets/song_tile.dart';
 
 enum SongSort { recentlyAdded, recentlyPlayed, titleAz, titleZa, artist, album, mostPlayed, leastPlayed }
@@ -166,9 +167,7 @@ class _SongsScreenState extends ConsumerState<SongsScreen> {
           final song = songs[index];
           return SongTile(
             song: song,
-            onTap: () {
-              // Phase 2 wires this into AudioPlayerService.play(song).
-            },
+            onTap: () => ref.read(playerProvider.notifier).playQueue(songs, startIndex: index),
             onToggleFavorite: () => ref.read(libraryProvider.notifier).toggleFavorite(song),
             onRemove: () => _confirmRemove(context, song),
             onAddToPlaylist: () {

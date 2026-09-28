@@ -24,4 +24,6 @@ class AppConstants {
   static const String prefAccentColor = 'pref_accent_color';
   static const String prefSortOption = 'pref_sort_option';
   static const String prefFirstLaunchDone = 'pref_first_launch_done';
+  static const String prefProfileName = 'pref_profile_name';
+  static const String prefProfilePhotoPath = 'pref_profile_photo_path';
 }
